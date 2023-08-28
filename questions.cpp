@@ -3,6 +3,7 @@
 #include <cstring>
 #include <cctype>
 #include <sstream>
+#include <ncurses.h>
 #include "questions.h"
 
 //default constructor
@@ -12,8 +13,21 @@ Mike::Mike()
     //getdata();
     //setdata();
     //check();
+    //load number from file
+    //save number in variable
+    //modify the variable until function quits
+    //save the new variable to file
     readNumberFromFile("test.txt", questions);
     std::cout<<questions<<std::endl;
+    tempQuestions = questions;
+    breakOnKeyPress('q');
+    std::cout<<"Addition to the existing number: "<< number <<std::endl;
+    tempQuestions = tempQuestions + number;
+    writeToFile("test.txt", tempQuestions);
+    std::cout<<tempQuestions<<std::endl;
+    //modify temp questions 
+    
+    
     /*Test Functions*/
 }
 
@@ -22,6 +36,7 @@ Mike::~Mike(void)
 {
 
 };
+
 
 void Mike::getdata()
 {
@@ -69,6 +84,51 @@ bool Mike::check()
     }
 }
 
+bool Mike::breakOnKeyPress(char keyToBreak)
+{
+    initscr(); // initialize ncurses
+    noecho(); //do not echo keypresses to the screen
+    cbreak(); //disable line buffering, read keys instantly
+    keypad(stdscr, TRUE); //enable special keys
+
+    char keyPressed;
+    while (true)
+    {
+        refresh();
+        keyPressed = getch(); //get the key that was pressed
+        if(keyPressed == keyToBreak)
+        {
+            endwin(); // clean up ncursed before exiting
+            return true; //Break if the desired key is pressed
+        }
+        clrtoeol(); //clear the current line
+        move(0,0); // move the cursor to the beginning of the line (0,0)
+        number++;
+        std::cout<<number<<std::endl;
+
+    }
+    return false;
+}
+
+void Mike::writeToFile(const std::string& filename, int input)
+{
+    std::cout<<"Writing data to file"<<std::endl;
+    std::ofstream outFile(filename);
+
+    if(!outFile.is_open())
+    {
+        std::cerr<<"Error opening the file for writing: "<< filename <<std::endl;
+        return;
+    }
+
+    //write the content to the file
+    outFile << input;
+
+    std::cout<<"Content has been written to the file"<<std::endl;
+
+    //close the file
+    outFile.close();
+}
 
 //Read and write file functions
 void Mike::writeFile(const std::string& filename)
