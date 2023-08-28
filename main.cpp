@@ -4,6 +4,6 @@
 
 int main()
 {
-    Mike a1;
+    Mike mike;
     return 0;
 };

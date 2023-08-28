@@ -6,6 +6,7 @@
 #include <cstring>
 #include <sstream>
 #include <string>
+#include <ncurses.h>
 
 class Mike
 {
@@ -18,6 +19,10 @@ class Mike
 
         //test functions
         bool check();
+
+        //test logic loops
+        bool breakOnKeyPress(char keyToBreak);
+
         //bool check(int input);
 
         void writeFile(const std::string& filename);
@@ -28,7 +33,9 @@ class Mike
 
     private:
         std::string content;
+        int number = 0;
         int questions = 0;
+        int tempQuestions = 0;
         int baseQuestions = 288;
         int button;
 };
